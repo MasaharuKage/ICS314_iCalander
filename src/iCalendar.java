@@ -1,5 +1,4 @@
 
-
 /* Package */
 
 
@@ -28,11 +27,18 @@ public class iCalendar
 
    public static void getData(Events event)
    {
-     String summary, start, end, location, timezone, month, day, year, datetime;
+     String summary, start, end, location, timezone, month, day, year, datetime, descrip;
+     float latitude, longitude;
+     String geoPosition;
+     char answer; //choice to enter for non required fields
      Scanner input = new Scanner(System.in);
      System.out.println("Enter the name of the event:");
      summary = input.nextLine();
      event.setInfo(summary);
+     
+     System.out.println("Enter the description of the event:");
+     descrip = input.nextLine();
+     event.setDescrip(descrip);
      
      System.out.println("Enter the month (e.g. 03):");
      month = input.nextLine();
@@ -56,6 +62,30 @@ public class iCalendar
      System.out.println("Enter the event location:");
      location = input.nextLine();
      event.setLocation(location);
+     
+     System.out.println("Do you want to enter the geographic position? (Y/N)");
+     answer = input.next().trim().charAt(0);
+     if(answer == 'Y' || answer == 'y')
+     {
+       do
+       {
+         System.out.println("Enter the latitude position (Range: -90 to 90)");
+         latitude = input.nextFloat();
+       }while(latitude < -90 || latitude > 90);
+       
+       do
+       {
+         System.out.println("Enter the longitude position (Range: -180 to 180)");
+         longitude = input.nextFloat();
+       }while(longitude < -180 || longitude > 180);
+     
+       geoPosition = Float.toString(latitude) + ';' + Float.toString(longitude);
+       event.setGeo(geoPosition);
+     }
+     else 
+     {
+       System.out.println("Geographic position information skipped.");
+     }
      
      //System.out.println("Enter the timezone you are in.");
      //timezone = input.nextLine();
@@ -108,9 +138,16 @@ public class iCalendar
          /* Summary */
          output.write("SUMMARY:" + event.getInfo());
          output.write("\n");
+         
+         /*Description*/
+         output.write("Description:" + event.getDescrip());
+         output.write("\n");
 
          /* Location */
          output.write("LOCATION:" + event.getLocation());
+         output.write("\n");
+         
+         output.write("GEO:" + event.getGeo());
          output.write("\n");
 
          /* End */

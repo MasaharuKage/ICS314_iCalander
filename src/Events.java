@@ -18,6 +18,8 @@ public class Events
    private String DTEnd;    //End date & time
    private String location; //Location of event
    private String TimeZone; //Time Zone
+   private String Description; //Description of event
+   private String Geo; //Geographic position
 
 
    /* Constructor */
@@ -27,9 +29,11 @@ public class Events
       setVer("2.0");
       setProdid("-//UHMANOA_ICS314_SPRING_2016//TEAM_QUATRO//ICAL_EVENT_MAKER");
       setInfo("");
+      setDescrip("");
       setDTStart("");
       setDTEnd("");
       setLocation("");
+      setGeo("");
       setTZ("");
    }
 
@@ -53,6 +57,11 @@ public class Events
    {
       return summary;
    }
+   
+   public String getDescrip()
+   {
+     return Description;
+   }
 
    public String getTZ()
    {
@@ -72,6 +81,11 @@ public class Events
    public String getLocation()
    {
       return location;
+   }
+   
+   public String getGeo()
+   {
+     return Geo;
    }
 
    /* Set functions */
@@ -94,6 +108,11 @@ public class Events
    {
       this.summary = summary;
    }
+   
+   public void setDescrip(String Description)
+   {
+     this.Description = Description;
+   }
 
    public void setTZ(String TimeZone)
    {
@@ -113,6 +132,11 @@ public class Events
    public void setLocation(String Location)
    {
       this.location = Location;
+   }
+   
+   public void setGeo(String Geo)
+   {
+     this.Geo = Geo;
    }
 
 }

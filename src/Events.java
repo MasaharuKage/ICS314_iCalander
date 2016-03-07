@@ -20,6 +20,7 @@ public class Events
    private String TimeZone; //Time Zone
    private String Description; //Description of event
    private String Geo; //Geographic position
+   private String classification; //Classification 
 
 
    /* Constructor */
@@ -35,6 +36,7 @@ public class Events
       setLocation("");
       setGeo("");
       setTZ("");
+      setClassi("");
    }
 
    /* Get functions */
@@ -61,6 +63,11 @@ public class Events
    public String getDescrip()
    {
      return Description;
+   }
+   
+   public String getClassi()
+   {
+     return classification;
    }
 
    public String getTZ()
@@ -112,6 +119,11 @@ public class Events
    public void setDescrip(String Description)
    {
      this.Description = Description;
+   }
+   
+   public void setClassi(String classification)
+   {
+     this.classification = classification;
    }
 
    public void setTZ(String TimeZone)

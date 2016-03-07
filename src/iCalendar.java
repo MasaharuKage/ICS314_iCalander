@@ -29,8 +29,9 @@ public class iCalendar
    {
      String summary, start, end, location, timezone, month, day, year, datetime, descrip;
      float latitude, longitude;
-     String geoPosition;
-     char answer; //choice to enter for non required fields
+     String geoPosition, classif;
+     char geoAnswer, classAnswer; int choice;//choice to enter for non required fields
+     
      Scanner input = new Scanner(System.in);
      System.out.println("Enter the name of the event:");
      summary = input.nextLine();
@@ -64,8 +65,8 @@ public class iCalendar
      event.setLocation(location);
      
      System.out.println("Do you want to enter the geographic position? (Y/N)");
-     answer = input.next().trim().charAt(0);
-     if(answer == 'Y' || answer == 'y')
+     geoAnswer = input.next().trim().charAt(0);
+     if(geoAnswer == 'Y' || geoAnswer == 'y')
      {
        do
        {
@@ -85,6 +86,38 @@ public class iCalendar
      else 
      {
        System.out.println("Geographic position information skipped.");
+     }
+     
+     System.out.println("Do you want to enter the classification of the event? (Y/N)");
+     classAnswer = input.next().trim().charAt(0);
+     if(classAnswer == 'Y' || classAnswer == 'y')
+     {
+       System.out.println("Choose a number for classificaton: 1-public, 2-private, 3-confidential");
+       choice = input.nextInt();
+       switch(choice)
+       {
+         case 1:
+           classif = "PUBLIC";
+           event.setClassi(classif);
+           break;
+         case 2:
+           classif = "PRIVATE";
+           event.setClassi(classif);
+           break;
+         case 3:
+           classif = "CONFIDENTIAL";
+           event.setClassi(classif);
+           break;
+         default:
+           System.out.println("Invalid Choice.");
+           break;
+       }
+     }
+     else
+     {
+       System.out.println("Classification information skipped, default to PUBLIC");
+       classif = "PUBLIC";
+       event.setClassi(classif);
      }
      
      //System.out.println("Enter the timezone you are in.");
@@ -140,7 +173,11 @@ public class iCalendar
          output.write("\n");
          
          /*Description*/
-         output.write("Description:" + event.getDescrip());
+         output.write("DESCRIPTION:" + event.getDescrip());
+         output.write("\n");
+         
+         /*Classification*/
+         output.write("CLASS:" + event.getClassi());
          output.write("\n");
 
          /* Location */

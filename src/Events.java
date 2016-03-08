@@ -5,7 +5,7 @@
  */
 
 /* Package */
-
+package iCalendar;
 
 public class Events
 {

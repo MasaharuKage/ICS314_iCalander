@@ -4,9 +4,6 @@
  * Team Quatro
  */
 
-/* Package */
-package iCalendar;
-
 public class Events
 {
    /* Information for each event */
@@ -21,7 +18,6 @@ public class Events
    private String Description; //Description of event
    private String Geo; //Geographic position
    private String classification; //Classification 
-
 
    /* Constructor */
    public Events()

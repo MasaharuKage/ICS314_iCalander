@@ -1,7 +1,7 @@
 /* 
  * Calendar Object
  * 
- * Team Quartro
+ * Team Quatro
  */
 
 /* Class */

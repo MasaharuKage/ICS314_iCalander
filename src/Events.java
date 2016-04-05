@@ -18,7 +18,10 @@ public class Events
    private String Description; //Description of event
    private String Geo; //Geographic position
    private String classification; //Classification 
-
+   private String comments; //comments 
+   private double longitude; //longitude
+   private double latitude; //latitude
+   
    /* Constructor */
    public Events()
    {
@@ -33,6 +36,9 @@ public class Events
       setGeo("");
       setTZ("");
       setClassi("");
+      setComments("");
+      longitude = 0.0;
+      latitude = 0.0;
    }
 
    /* Get functions */
@@ -90,6 +96,10 @@ public class Events
    {
      return Geo;
    }
+   
+   public String getComments() {
+     return comments;
+   }
 
    /* Set functions */
    public void setVer(String version)
@@ -146,5 +156,25 @@ public class Events
    {
      this.Geo = Geo;
    }
+
+  public void setComments(String comments) {
+    this.comments = comments;
+  }
+
+  public double getLongitude() {
+    return longitude;
+  }
+
+  public void setLongitude(double longitude) {
+    this.longitude = longitude;
+  }
+
+  public double getLatitude() {
+    return latitude;
+  }
+
+  public void setLatitude(double latitude) {
+    this.latitude = latitude;
+  }
 
 }

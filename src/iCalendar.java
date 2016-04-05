@@ -93,15 +93,13 @@ public class iCalendar {
         event.get(i).setLongitude(longitude);
         event.get(i).setLatitude(latitude);
 
-        if(i != 0){
-        geoComment = "Distance from last event in " + event.get(i-1).getLocation() + " is " + GCDist.Statute_Miles(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(),longitude, latitude) + "miles" 
+       if(i > 0 && event.get(i-1).getLongitude() != 0.0 && event.get(i-1).getLatitude() != 0.0 && event.get(i).getLongitude() != 0.0 && event.get(i).getLatitude() != 0.0){
+        geoComment = "Distance to next event in " + event.get(i).getLocation() + " is " + GCDist.Statute_Miles(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(),longitude, latitude) + "miles" 
                       + " and " + GCDist.Kilometers(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(),longitude, latitude) + " kilometers.";
-                System.out.println("longitudes are " + event.get(i-1).getLongitude() + event.get(i-1).getLatitude() + longitude + latitude);}
-
-        event.get(i).setComments(geoComment);
+        event.get(i-1).setComments(geoComment);
+       }
       
-      }
-      else {
+      }else {
         System.out.println("Geographic position information skipped.\n");
       }
       

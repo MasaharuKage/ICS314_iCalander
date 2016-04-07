@@ -28,11 +28,11 @@ public class iCalendar {
   }
 
   public static void getData(ArrayList<Events> event) {
-    String summary, start, end, location, timezone, month, day, year, datetime, descrip, geoComment = null;
+    String summary, start, end, location, month, day, year, datetime, descrip, geoComment = null;
     boolean temp1, temp2;
     float latitude, longitude;
     String geoPosition, classif;
-    char geoAnswer, classAnswer, classAnswer2, classAnswer3;
+    char geoAnswer, classAnswer, classAnswer2;
     int choice;// choice to enter for non required fields
     Scanner input = null;
     temp1 = true;
@@ -104,8 +104,6 @@ public class iCalendar {
       }
       
       
-      
-
       System.out.println("Do you want to enter the classification of the event? (Y/N)");
       classAnswer = input.next().trim().charAt(0);
       if (classAnswer == 'Y' || classAnswer == 'y') {
@@ -158,10 +156,6 @@ public class iCalendar {
       }
 
     }
-
-    // System.out.println("Enter the timezone you are in.");
-    // timezone = input.nextLine();
-    // event.setTZ(timezone);
 
     input.close();
   }

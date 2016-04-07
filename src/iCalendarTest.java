@@ -43,8 +43,26 @@ public class iCalendarTest {
       assertEquals("Geographic locations do not match", "84.5657;134.53435", temp.getGeo());
   }
   
-
+  @Test
+  public void testDistance(){
+    double lat1 = 43.3, lat2 = 90, long1 = 140.23, long2 = 132;
+    double calc, calc2;
+    
+    calc = GCDist.Kilometers(long1, lat1, long2, lat2);
+    calc2 = GCDist.Statute_Miles(long1, lat1, long2, lat2);
+    
+    assertNotNull(calc);
+    assertNotNull(calc2);
+    assertNotSame(calc, calc2);
+  }
   
-
+  @Test
+  public void testClassification(){
+    Events temp = new Events();
+    String classif = "PRIVATE";
+    temp.setClassi(classif);
+    assertEquals("Classification does not match", "PRIVATE", temp.getClassi());
+  }
+  
 
 }

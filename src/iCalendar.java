@@ -4,31 +4,51 @@
  * Team Quartro
  */
 
-import java.util.*;
 import java.io.*;
 import java.text.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
 import java.net.InetAddress;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.Collections;
 
 /* Main Class */
 public class iCalendar {
-  public static void main(String[] args) {
+  public static void main(String[] args) 
+  {
 
     /* Arraylist of events */
     ArrayList<Events> listOfEvents = new ArrayList<Events>();
 
     /* Get data */
     getData(listOfEvents);
+    
+    /* Sort data */
+    Collections.sort(listOfEvents, new Comparator <Events>()
+    {
+    	@Override
+    	public int compare(Events e1, Events e2)
+    	{
+    		String T1 = Objects.toString(((Events) e1).getStart());
+    		String T2 = Objects.toString(((Events) e2).getStart());
+    		
+    		return T1.compareTo(T2);
+    	}
+    });
+    
+    /* Calculate Distance between events */
+    calcDist(listOfEvents);
 
     /* Generate the .ics file */
     createTrueEvent(createEvent(listOfEvents));
 
   }
 
-  public static void getData(ArrayList<Events> event) {
-    String summary, start, end, location, month, day, year, datetime, descrip, geoComment = null;
+  public static void getData(ArrayList<Events> event) 
+  {
+    String summary, start, end, location, timezone, month, day, year, datetime, descrip = null;
     boolean temp1, temp2;
     float latitude, longitude;
     String geoPosition, classif;
@@ -37,7 +57,8 @@ public class iCalendar {
     Scanner input = null;
     temp1 = true;
 
-    for (int i = 0; temp1 == true; i++) {
+    for (int i = 0; temp1 == true; i++) 
+    {
       /* Event object */
       Events event1 = new Events();
       event.add(event1);
@@ -68,6 +89,11 @@ public class iCalendar {
       datetime = year + month + day;
       event.get(i).setDTStart(datetime + 'T' + start);
       event.get(i).setDTEnd(datetime + 'T' + end);
+      event.get(i).setDay(Integer.parseInt(day));
+      event.get(i).setMonth(Integer.parseInt(month));
+      event.get(i).setYear(Integer.parseInt(year));
+      event.get(i).setStart(Long.parseLong(start));
+      event.get(i).setEnd(Long.parseLong(end));
 
       System.out.println("Enter the event location:");
       location = input.nextLine();
@@ -75,60 +101,61 @@ public class iCalendar {
 
       System.out.println("Do you want to enter the geographic position? (Y/N)");
       geoAnswer = input.next().trim().charAt(0);
-      if (geoAnswer == 'Y' || geoAnswer == 'y') {
-        do {
+      if (geoAnswer == 'Y' || geoAnswer == 'y') 
+      {
+        do 
+        {
           System.out.println("Enter the latitude position (Range: -90 to 90)");
           latitude = input.nextFloat();
         } while (latitude < -90 || latitude > 90);
 
-        do {
+        do 
+        {
           System.out
               .println("Enter the longitude position (Range: -180 to 180)");
           longitude = input.nextFloat();
         } while (longitude < -180 || longitude > 180);
 
-        geoPosition = Float.toString(latitude) + ';'
-            + Float.toString(longitude);
+        geoPosition = Float.toString(latitude) + ';' + Float.toString(longitude);
         event.get(i).setGeo(geoPosition);
         event.get(i).setLongitude(longitude);
         event.get(i).setLatitude(latitude);
-
-       if(i > 0 && event.get(i-1).getLongitude() != 0.0 && event.get(i-1).getLatitude() != 0.0 && event.get(i).getLongitude() != 0.0 && event.get(i).getLatitude() != 0.0){
-        geoComment = "Distance to next event in " + event.get(i).getLocation() + " is " + GCDist.Statute_Miles(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(),longitude, latitude) + "miles" 
-                      + " and " + GCDist.Kilometers(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(),longitude, latitude) + " kilometers.";
-        event.get(i-1).setComments(geoComment);
-       }
       
-      }else {
+      }
+      else
+      {
         System.out.println("Geographic position information skipped.\n");
       }
       
-      
       System.out.println("Do you want to enter the classification of the event? (Y/N)");
       classAnswer = input.next().trim().charAt(0);
-      if (classAnswer == 'Y' || classAnswer == 'y') {
+      
+      if (classAnswer == 'Y' || classAnswer == 'y') 
+      {
         System.out
             .println("Choose a number for classificaton: 1-public, 2-private, 3-confidential");
         choice = input.nextInt();
-        switch (choice) {
-        case 1:
-          classif = "PUBLIC";
-          event.get(i).setClassi(classif);
-          break;
-        case 2:
-          classif = "PRIVATE";
-          event.get(i).setClassi(classif);
-          break;
-        case 3:
-          classif = "CONFIDENTIAL";
-          event.get(i).setClassi(classif);
-          break;
-        default:
-          System.out.println("Invalid Choice.");
-          break;
+        switch (choice) 
+        {
+          case 1:
+            classif = "PUBLIC";
+            event.get(i).setClassi(classif);
+            break;
+          case 2:
+            classif = "PRIVATE";
+            event.get(i).setClassi(classif);
+            break;
+          case 3:
+            classif = "CONFIDENTIAL";
+            event.get(i).setClassi(classif);
+            break;
+          default:
+            System.out.println("Invalid Choice.");
+            break;
         }
       }
-      else {
+      else 
+      {
         System.out
             .println("Classification information skipped, default to PUBLIC");
         classif = "PUBLIC";
@@ -136,34 +163,55 @@ public class iCalendar {
       }
 
       temp2 = true;
-      while (temp2) {
+      while (temp2) 
+      {
 
         System.out.println("Add another event? (Y/N)");
         classAnswer2 = input.next().trim().charAt(0);
 
-        if (classAnswer2 == 'N' || classAnswer2 == 'n') {
+        if (classAnswer2 == 'N' || classAnswer2 == 'n') 
+        {
           temp2 = false;
           temp1 = false;
         }
-        else if (classAnswer2 == 'Y' || classAnswer2 == 'y') {
+        else if (classAnswer2 == 'Y' || classAnswer2 == 'y') 
+        {
           temp2 = false;
           break;
         }
-        else {
+        else 
+        {
           System.out.println("Input 'Y' or 'N'");
         }
-
       }
-
+      
+      
     }
 
     input.close();
   }
+  
+  public static void calcDist(ArrayList<Events> event) 
+  {
+	  String geoComment = null;
+	  int i = 0;
+	  int max_size = event.size();
+	  for(i = 0; i < max_size; i++)
+	  {
+          if((i > 0) && (event.get(i).getLongitude() != 0.0) && (event.get(i).getLatitude() != 0.0) && (event.get(i-1).getLongitude() != 0.0) && (event.get(i-1).getLatitude() != 0.0))
+          {
+               geoComment = "Distance to next event in " + event.get(i).getLocation() + " is " + GCDist.Statute_Miles(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(), event.get(i).getLongitude(), event.get(i).getLatitude()) + " miles" 
+                         + " and " + GCDist.Kilometers(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(),event.get(i).getLongitude(), event.get(i).getLatitude()) + " kilometers.";
+           event.get(i-1).setComments(geoComment);
+          }
+	  }
+  }
 
-
-  public static ArrayList<File> createEvent(ArrayList<Events> event) {
+  public static ArrayList<File> createEvent(ArrayList<Events> event) 
+  {
     ArrayList<File> files = new ArrayList<File>();
-    for (int i = 0; i < event.size(); i++) {
+    for (int i = 0; i < event.size(); i++) 
+    {
       try {
         /* Create new file */
         File file = new File(event.get(i).getInfo() + ".ics");
@@ -211,12 +259,14 @@ public class iCalendar {
 
         /* Location */
         output.write("LOCATION:" + event.get(i).getLocation() + '\n');
-        if (event.get(i).getGeo() != "") {
+        if (event.get(i).getGeo() != "") 
+        {
           output.write("GEO:" + event.get(i).getGeo() + '\n');
         }
         
         /* Comments */
-        if (event.get(i).getComments() != null) {
+        if (event.get(i).getComments() != null) 
+        {
           output.write("COMMENT:" + event.get(i).getComments() + '\n');
         }
 
@@ -227,7 +277,8 @@ public class iCalendar {
         /* Close file */
         output.close();
       }
-      catch (IOException ioe) {
+      catch (IOException ioe) 
+      {
         ioe.printStackTrace();
       }
     }
@@ -235,12 +286,14 @@ public class iCalendar {
 
   }
   
-  private static void createTrueEvent(ArrayList<File> listOfFiles) {
+  private static void createTrueEvent(ArrayList<File> listOfFiles) 
+  {
     /* Create new file */
     File file = new File("TeamQuatro.ics");
     ArrayList<BufferedReader> alBR = new ArrayList<BufferedReader>();
     String line;
-    if (listOfFiles.size() == 0) {
+    if (listOfFiles.size() == 0) 
+    {
       System.out.println("No files to read.");
       return;
     }
@@ -249,7 +302,8 @@ public class iCalendar {
     try {
       BufferedWriter output = new BufferedWriter(new FileWriter(file));
 
-      for (int i = 0; i < listOfFiles.size(); i++) {
+      for (int i = 0; i < listOfFiles.size(); i++) 
+      {
 
         BufferedReader br = new BufferedReader(new FileReader(
             listOfFiles.get(i)));
@@ -257,29 +311,38 @@ public class iCalendar {
 
       }
 
-      if (listOfFiles.size() == 1) {
-        for (int i = 0; i < listOfFiles.size(); i++) {
-          while ((line = alBR.get(i).readLine()) != null) {
+      if (listOfFiles.size() == 1) 
+      {
+        for (int i = 0; i < listOfFiles.size(); i++) 
+        {
+          while ((line = alBR.get(i).readLine()) != null) 
+          {
             output.write(line + '\n');
           }
         }
         output.close();
         return;
       }
-      else {
-        for (int i = 0; i < 1; i++) {
+      else 
+      {
+        for (int i = 0; i < 1; i++) 
+        {
           line = alBR.get(i).readLine();
-          do {
+          do 
+          {
             output.write(line + '\n');
             line = alBR.get(i).readLine();
           } while (!line.equals("END:VCALENDAR"));
         }
 
-        for (int i = 1; i < listOfFiles.size(); i++) {
-          do {
+        for (int i = 1; i < listOfFiles.size(); i++) 
+        {
+          do 
+          {
             line = alBR.get(i).readLine();
           } while (!line.equals("BEGIN:VEVENT"));
-          do {
+          do 
+          {
             output.write(line + '\n');
             line = alBR.get(i).readLine();
           } while (!line.equals("END:VCALENDAR"));
@@ -291,7 +354,8 @@ public class iCalendar {
       }
       
     }
-    catch (IOException e1) {
+    catch (IOException e1) 
+    {
       e1.printStackTrace();
     }
 

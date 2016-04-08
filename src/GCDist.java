@@ -12,7 +12,7 @@ public class GCDist
 	{
 		/* Calculate distance */
 		double result = Distance(lng1, lat1, lng2, lat2);
-		System.out.println("result is" + result);
+		System.out.println("result is " + result);
 		/* Convert to statute miles */
 		result = result * 69.047;
 		return result;
@@ -40,7 +40,7 @@ public class GCDist
 		
 		/* For accuracy, we use the Vincenty formula */
 		double vince_d = Vincenty(lng1_R, lat1_R, lng2_R, lat2_R);
-    System.out.println("vinced is" + vince_d);
+    System.out.println("vinced is " + vince_d);
 
 		
 		/* Convert back to degrees */
@@ -52,7 +52,7 @@ public class GCDist
 	/* Vincenty formula, returns value in radians */
 	private static double Vincenty(double lng1, double lat1, double lng2, double lat2)
 	{
-	   System.out.println("lngs are" + lng1 + lng2 + lat1 + lat2);
+	   System.out.println("lngs are " + " " + lng1 + " " + lng2 + " " + lat1 + " " + lat2);
 
 		/* Absolute value of the difference in longitude */
 		double delta_lng = Math.abs(lng1 - lng2);

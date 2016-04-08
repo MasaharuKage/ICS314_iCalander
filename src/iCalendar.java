@@ -200,7 +200,7 @@ public class iCalendar {
 	  String geoComment = null;
 	  int i = 0;
 	  int max_size = event.size();
-	  for(i = 0; i < (max_size - 1); i++)
+	  for(i = 0; i < max_size; i++)
 	  {
           if((i > 0) && (event.get(i).getLongitude() != 0.0) && (event.get(i).getLatitude() != 0.0) && (event.get(i-1).getLongitude() != 0.0) && (event.get(i-1).getLatitude() != 0.0))
           {

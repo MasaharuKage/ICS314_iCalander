@@ -48,11 +48,11 @@ public class iCalendar {
 
   public static void getData(ArrayList<Events> event) 
   {
-    String summary, start, end, location, timezone, month, day, year, datetime, descrip = null;
+    String summary, start, end, location, month, day, year, datetime, descrip = null;
     boolean temp1, temp2;
     float latitude, longitude;
     String geoPosition, classif;
-    char geoAnswer, classAnswer, classAnswer2, classAnswer3;
+    char geoAnswer, classAnswer, classAnswer2;
     int choice;// choice to enter for non required fields
     Scanner input = null;
     temp1 = true;
@@ -132,8 +132,8 @@ public class iCalendar {
       
       if (classAnswer == 'Y' || classAnswer == 'y') 
       {
-        System.out
-            .println("Choose a number for classificaton: 1-public, 2-private, 3-confidential");
+        System.out.println("Choose a number for classificaton: "
+            + "1-public, 2-private, 3-confidential");
         choice = input.nextInt();
         switch (choice) 
         {
@@ -156,8 +156,7 @@ public class iCalendar {
       }
       else 
       {
-        System.out
-            .println("Classification information skipped, default to PUBLIC");
+        System.out.println("Classification information skipped, default to PUBLIC");
         classif = "PUBLIC";
         event.get(i).setClassi(classif);
       }
@@ -188,10 +187,6 @@ public class iCalendar {
       
     }
 
-    // System.out.println("Enter the timezone you are in.");
-    // timezone = input.nextLine();
-    // event.setTZ(timezone);
-
     input.close();
   }
   
@@ -202,11 +197,16 @@ public class iCalendar {
 	  int max_size = event.size();
 	  for(i = 0; i < max_size; i++)
 	  {
-          if((i > 0) && (event.get(i).getLongitude() != 0.0) && (event.get(i).getLatitude() != 0.0) && (event.get(i-1).getLongitude() != 0.0) && (event.get(i-1).getLatitude() != 0.0))
+          if((i > 0) && (event.get(i).getLongitude() != 0.0) && (event.get(i).getLatitude() != 0.0) 
+              && (event.get(i-1).getLongitude() != 0.0) && (event.get(i-1).getLatitude() != 0.0))
           {
-               geoComment = "Distance to next event in " + event.get(i).getLocation() + " is " + GCDist.Statute_Miles(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(), event.get(i).getLongitude(), event.get(i).getLatitude()) + " miles" 
-                         + " and " + GCDist.Kilometers(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(),event.get(i).getLongitude(), event.get(i).getLatitude()) + " kilometers.";
-           event.get(i-1).setComments(geoComment);
+               geoComment = "Distance to next event in " + event.get(i).getLocation() + " is " + 
+                             GCDist.Statute_Miles(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(), 
+                             event.get(i).getLongitude(), event.get(i).getLatitude()) + " miles" 
+                             + " and " + GCDist.Kilometers(event.get(i-1).getLongitude(), 
+                             event.get(i-1).getLatitude(),event.get(i).getLongitude(), event.get(i).getLatitude()) + " kilometers.";
+           
+               event.get(i-1).setComments(geoComment);
           }
 	  }
   }
@@ -216,7 +216,8 @@ public class iCalendar {
     ArrayList<File> files = new ArrayList<File>();
     for (int i = 0; i < event.size(); i++) 
     {
-      try {
+      try 
+      {
         /* Create new file */
         File file = new File(event.get(i).getInfo() + ".ics");
 

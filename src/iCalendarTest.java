@@ -63,6 +63,6 @@ public class iCalendarTest {
     temp.setClassi(classif);
     assertEquals("Classification does not match", "PRIVATE", temp.getClassi());
   }
-  
+
 
 }

@@ -94,7 +94,7 @@ public class iCalendar {
         event.get(i).setLatitude(latitude);
 
        if(i > 0 && event.get(i-1).getLongitude() != 0.0 && event.get(i-1).getLatitude() != 0.0 && event.get(i).getLongitude() != 0.0 && event.get(i).getLatitude() != 0.0){
-        geoComment = "Distance to next event in " + event.get(i).getLocation() + " is " + GCDist.Statute_Miles(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(),longitude, latitude) + "miles" 
+        geoComment = "Distance to next event in " + event.get(i).getLocation() + " is " + GCDist.Statute_Miles(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(),longitude, latitude) + " miles" 
                       + " and " + GCDist.Kilometers(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(),longitude, latitude) + " kilometers.";
         event.get(i-1).setComments(geoComment);
        }

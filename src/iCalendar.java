@@ -5,13 +5,11 @@
  */
 
 import java.io.*;
-import java.text.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
 import java.net.InetAddress;
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.Collections;
 
 /* Main Class */
@@ -31,8 +29,8 @@ public class iCalendar {
     	@Override
     	public int compare(Events e1, Events e2)
     	{
-    		String T1 = Objects.toString(((Events) e1).getStart());
-    		String T2 = Objects.toString(((Events) e2).getStart());
+    		Long T1 = ((Events) e1).getStart();
+    		Long T2 = ((Events) e2).getStart();
     		
     		return T1.compareTo(T2);
     	}

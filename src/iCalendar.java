@@ -195,8 +195,8 @@ public class iCalendar {
 	  int max_size = event.size();
 	  for(i = 0; i < max_size; i++)
 	  {
-          if((i > 0) && (event.get(i).getLongitude() != 0.0) && (event.get(i).getLatitude() != 0.0) 
-              && (event.get(i-1).getLongitude() != 0.0) && (event.get(i-1).getLatitude() != 0.0))
+          if((i > 0) && (event.get(i).getLongitude() != -500) && (event.get(i).getLatitude() != -500) 
+              && (event.get(i-1).getLongitude() != -500) && (event.get(i-1).getLatitude() != -500))
           {
                geoComment = "Distance to next event in " + event.get(i).getLocation() + " is " + 
                              GCDist.Statute_Miles(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(), 

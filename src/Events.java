@@ -48,8 +48,8 @@ public class Events
       year = 0;
       STime = 0;
       ETime = 0;
-      longitude = 0.0;
-      latitude = 0.0;
+      longitude = -500;
+      latitude = -500;
    }
 
    /* Get functions */

@@ -20,8 +20,8 @@ public class iCalendar {
     /* Arraylist of events */
     ArrayList<Events> listOfEvents = new ArrayList<Events>();
 
-    /* Get data */
-    getData(listOfEvents);
+    /* Obtains the data from user to write into event file */
+    collectData(listOfEvents);
     
     /* Sort data */
     Collections.sort(listOfEvents, new Comparator <Events>()
@@ -44,134 +44,38 @@ public class iCalendar {
 
   }
 
-  public static void getData(ArrayList<Events> event) 
+  public static void collectData(ArrayList<Events> event) 
   {
-    String summary, start, end, location, month, day, year, datetime, descrip = null;
     boolean temp1, temp2;
-    float latitude, longitude;
-    String geoPosition, classif;
-    char geoAnswer, classAnswer, classAnswer2;
-    int choice;// choice to enter for non required fields
-    Scanner input = null;
     temp1 = true;
 
     for (int i = 0; temp1 == true; i++) 
     {
-      /* Event object */
+      /* Create Event object */
       Events event1 = new Events();
       event.add(event1);
+      Scanner input = null;
       input = new Scanner(System.in);
-      System.out.println("Enter the name of the event:");
-      summary = input.nextLine();
-      event.get(i).setInfo(summary);
-
-      System.out.println("Enter the description of the event:");
-      descrip = input.nextLine();
-      event.get(i).setDescrip(descrip);
-
-      System.out.println("Enter the month (e.g. 03):");
-      month = input.nextLine();
-      System.out.println("Enter the day (e.g. 27):");
-      day = input.nextLine();
-      System.out.println("Enter the year (e.g. 2016):");
-      year = input.nextLine();
-
-      System.out.println("Enter the start time (e.g. 120000):");
-      start = input.nextLine();
-      event.get(i).setDTStart(start);
-
-      System.out.println("Enter the end time (e.g. 150000:");
-      end = input.nextLine();
-      event.get(i).setDTEnd(end);
-
-      datetime = year + month + day;
-      event.get(i).setDTStart(datetime + 'T' + start);
-      event.get(i).setDTEnd(datetime + 'T' + end);
-      event.get(i).setDay(Integer.parseInt(day));
-      event.get(i).setMonth(Integer.parseInt(month));
-      event.get(i).setYear(Integer.parseInt(year));
-      event.get(i).setStart(Long.parseLong(start));
-      event.get(i).setEnd(Long.parseLong(end));
-
-      System.out.println("Enter the event location:");
-      location = input.nextLine();
-      event.get(i).setLocation(location);
-
-      System.out.println("Do you want to enter the geographic position? (Y/N)");
-      geoAnswer = input.next().trim().charAt(0);
-      if (geoAnswer == 'Y' || geoAnswer == 'y') 
-      {
-        do 
-        {
-          System.out.println("Enter the latitude position (Range: -90 to 90)");
-          latitude = input.nextFloat();
-        } while (latitude < -90 || latitude > 90);
-
-        do 
-        {
-          System.out
-              .println("Enter the longitude position (Range: -180 to 180)");
-          longitude = input.nextFloat();
-        } while (longitude < -180 || longitude > 180);
-
-        geoPosition = Float.toString(latitude) + ';' + Float.toString(longitude);
-        event.get(i).setGeo(geoPosition);
-        event.get(i).setLongitude(longitude);
-        event.get(i).setLatitude(latitude);
       
-      }
-      else
-      {
-        System.out.println("Geographic position information skipped.\n");
-      }
-      
-      System.out.println("Do you want to enter the classification of the event? (Y/N)");
-      classAnswer = input.next().trim().charAt(0);
-      
-      if (classAnswer == 'Y' || classAnswer == 'y') 
-      {
-        System.out.println("Choose a number for classificaton: "
-            + "1-public, 2-private, 3-confidential");
-        choice = input.nextInt();
-        switch (choice) 
-        {
-          case 1:
-            classif = "PUBLIC";
-            event.get(i).setClassi(classif);
-            break;
-          case 2:
-            classif = "PRIVATE";
-            event.get(i).setClassi(classif);
-            break;
-          case 3:
-            classif = "CONFIDENTIAL";
-            event.get(i).setClassi(classif);
-            break;
-          default:
-            System.out.println("Invalid Choice.");
-            break;
-        }
-      }
-      else 
-      {
-        System.out.println("Classification information skipped, default to PUBLIC");
-        classif = "PUBLIC";
-        event.get(i).setClassi(classif);
-      }
+      getBasicEventInfo(i, input, event);
+      getEventDateTime(i, input, event);
+      getEventGeo(i, input, event);
+      getEventClass(i, input, event);
 
       temp2 = true;
       while (temp2) 
       {
-
+        char addEventAnswer;
+        
         System.out.println("Add another event? (Y/N)");
-        classAnswer2 = input.next().trim().charAt(0);
+        addEventAnswer = input.next().trim().charAt(0);
 
-        if (classAnswer2 == 'N' || classAnswer2 == 'n') 
+        if (addEventAnswer == 'N' || addEventAnswer == 'n') 
         {
           temp2 = false;
           temp1 = false;
         }
-        else if (classAnswer2 == 'Y' || classAnswer2 == 'y') 
+        else if (addEventAnswer == 'Y' || addEventAnswer == 'y') 
         {
           temp2 = false;
           break;
@@ -182,10 +86,131 @@ public class iCalendar {
         }
       }
       
-      
+      input.close();
     }
 
-    input.close();
+  }
+  
+  private static void getBasicEventInfo(int i, Scanner input, ArrayList<Events> event)
+  {
+    String summary, descrip, location;
+   
+    System.out.println("Enter the name of the event:");
+    summary = input.nextLine();
+    event.get(i).setInfo(summary);
+
+    System.out.println("Enter the description of the event:");
+    descrip = input.nextLine();
+    event.get(i).setDescrip(descrip);
+
+    System.out.println("Enter the event location:");
+    location = input.nextLine();
+    event.get(i).setLocation(location);
+  }
+  
+  private static void getEventDateTime(int i, Scanner input, ArrayList<Events> event)
+  {
+    String month, day, year, start, end, datetime;
+    
+    System.out.println("Enter the month (e.g. 03):");
+    month = input.nextLine();
+    System.out.println("Enter the day (e.g. 27):");
+    day = input.nextLine();
+    System.out.println("Enter the year (e.g. 2016):");
+    year = input.nextLine();
+
+    System.out.println("Enter the start time (e.g. 120000):");
+    start = input.nextLine();
+    event.get(i).setDTStart(start);
+
+    System.out.println("Enter the end time (e.g. 150000:");
+    end = input.nextLine();
+    event.get(i).setDTEnd(end);
+
+    datetime = year + month + day;
+    event.get(i).setDTStart(datetime + 'T' + start);
+    event.get(i).setDTEnd(datetime + 'T' + end);
+    event.get(i).setDay(Integer.parseInt(day));
+    event.get(i).setMonth(Integer.parseInt(month));
+    event.get(i).setYear(Integer.parseInt(year));
+    event.get(i).setStart(Long.parseLong(start));
+    event.get(i).setEnd(Long.parseLong(end));
+  }
+  
+  private static void getEventGeo(int i, Scanner input, ArrayList<Events> event)
+  {
+    char geoAnswer;
+    float latitude, longitude;
+    String geoPosition;
+    
+    System.out.println("Do you want to enter the geographic position? (Y/N)");
+    geoAnswer = input.next().trim().charAt(0);
+    
+    if (geoAnswer == 'Y' || geoAnswer == 'y') 
+    {
+      do 
+      {
+        System.out.println("Enter the latitude position (Range: -90 to 90)");
+        latitude = input.nextFloat();
+      } while (latitude < -90 || latitude > 90);
+
+      do 
+      {
+        System.out
+            .println("Enter the longitude position (Range: -180 to 180)");
+        longitude = input.nextFloat();
+      } while (longitude < -180 || longitude > 180);
+
+      geoPosition = Float.toString(latitude) + ';' + Float.toString(longitude);
+      event.get(i).setGeo(geoPosition);
+      event.get(i).setLongitude(longitude);
+      event.get(i).setLatitude(latitude);
+    }
+    else
+    {
+      System.out.println("Geographic position information skipped.\n");
+    }
+  }
+  
+  private static void getEventClass(int i, Scanner input, ArrayList<Events> event)
+  {
+    char classAnswer;
+    int choice;
+    String classif;
+    
+    System.out.println("Do you want to enter the classification of the event? (Y/N)");
+    classAnswer = input.next().trim().charAt(0);
+    
+    if (classAnswer == 'Y' || classAnswer == 'y') 
+    {
+      System.out.println("Choose a number for classificaton: "
+          + "1-public, 2-private, 3-confidential");
+      choice = input.nextInt();
+      switch (choice) 
+      {
+        case 1:
+          classif = "PUBLIC";
+          event.get(i).setClassi(classif);
+          break;
+        case 2:
+          classif = "PRIVATE";
+          event.get(i).setClassi(classif);
+          break;
+        case 3:
+          classif = "CONFIDENTIAL";
+          event.get(i).setClassi(classif);
+          break;
+        default:
+          System.out.println("Invalid Choice.");
+          break;
+      }
+    }
+    else 
+    {
+      System.out.println("Classification information skipped, default to PUBLIC");
+      classif = "PUBLIC";
+      event.get(i).setClassi(classif);
+    }
   }
   
   public static void calcDist(ArrayList<Events> event) 

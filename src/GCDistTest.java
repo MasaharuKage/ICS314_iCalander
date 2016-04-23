@@ -17,14 +17,6 @@ public class GCDistTest {
     assertNotNull(calc2);
     assertNotSame(calc, calc2);
   }
-  
-  @Test
-  public void testClassification(){
-    Events temp = new Events();
-    String classif = "PRIVATE";
-    temp.setClassi(classif);
-    assertEquals("Classification does not match", "PRIVATE", temp.getClassi());
-  }
 
   @Test
   public void testDistanceMiles() {

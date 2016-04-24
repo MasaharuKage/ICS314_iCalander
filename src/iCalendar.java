@@ -16,6 +16,18 @@ import java.util.Collections;
 public class iCalendar {
   public static void main(String[] args) 
   {
+    
+    if(args.length > 0){
+      //ArrayList<String> listOfFiles = new ArrayList<String>();
+      ArrayList<File> listOfFiles = new ArrayList<File>();
+      
+      for(int i = 0; i < args.length; i++) {
+      String name = args[i];
+      File filename = new File(name);
+      listOfFiles.add(filename);
+      }createTrueEvent(listOfFiles);
+      
+    }else {
 
     /* Arraylist of events */
     ArrayList<Events> listOfEvents = new ArrayList<Events>();
@@ -42,6 +54,7 @@ public class iCalendar {
     /* Generate the .ics file */
     createTrueEvent(createEvent(listOfEvents));
 
+    }
   }
 
   public static void getData(ArrayList<Events> event) 

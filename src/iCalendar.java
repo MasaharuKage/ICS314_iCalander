@@ -351,8 +351,8 @@ public class iCalendar {
       for (int i = 0; i < listOfFiles.size(); i++) 
       {
 
-        BufferedReader br = new BufferedReader(new FileReader(
-            listOfFiles.get(i)));
+        BufferedReader br = new BufferedReader(new FileReader
+            (listOfFiles.get(i)));
         alBR.add(br);
 
       }

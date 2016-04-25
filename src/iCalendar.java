@@ -39,7 +39,7 @@ public class iCalendar {
     ArrayList<Events> listOfEvents = new ArrayList<Events>();
 
     /* Obtains the data from user to write into event file */
-    collectData(listOfEvents);
+    getData(listOfEvents);
     
     /* Sort data */
     Collections.sort(listOfEvents, new Comparator <Events>()
@@ -63,40 +63,29 @@ public class iCalendar {
 
   }
 
-  public static void collectData(ArrayList<Events> event) 
+  public static void getData(ArrayList<Events> event) 
   {
+    char addEventAnswer;
     boolean temp1, temp2;
+    Scanner input = null;
     temp1 = true;
 
     for (int i = 0; temp1 == true; i++) 
     {
-      String summary, descrip, location;
       /* Create Event object */
       Events event1 = new Events();
       event.add(event1);
-      Scanner input = null;
       input = new Scanner(System.in);
       
-      System.out.println("Enter the name of the event:");
-      summary = input.nextLine();
-      event.get(i).setInfo(summary);
-
-      System.out.println("Enter the description of the event:");
-      descrip = input.nextLine();
-      event.get(i).setDescrip(descrip);
-
-      System.out.println("Enter the event location:");
-      location = input.nextLine();
-      event.get(i).setLocation(location);
-  
-      getEventDateTime(i, input, event);
+      getBasicEventInfo(i, input, event);
+      
       getEventGeo(i, input, event);
+      
       getEventClass(i, input, event);
 
       temp2 = true;
       while (temp2) 
       {
-        char addEventAnswer;
         
         System.out.println("Add another event? (Y/N)");
         addEventAnswer = input.next().trim().charAt(0);
@@ -117,15 +106,24 @@ public class iCalendar {
         }
       }
       
-      input.close();
     }
     
+    input.close();
   }
   
-  private static void getEventDateTime(int i, Scanner input, ArrayList<Events> event)
+  private static void getBasicEventInfo(int i, Scanner input, ArrayList<Events> event)
   {
-    String month, day, year, start, end, datetime;
+    String summary, descrip, location = null;
+    String month, day, year, start, end, datetime = null;
     
+    System.out.println("Enter the name of the event:");
+    summary = input.nextLine();
+    event.get(i).setInfo(summary);
+
+    System.out.println("Enter the description of the event:");
+    descrip = input.nextLine();
+    event.get(i).setDescrip(descrip);
+
     System.out.println("Enter the month (e.g. 03):");
     month = input.nextLine();
     System.out.println("Enter the day (e.g. 27):");
@@ -149,6 +147,10 @@ public class iCalendar {
     event.get(i).setYear(Integer.parseInt(year));
     event.get(i).setStart(Long.parseLong(start));
     event.get(i).setEnd(Long.parseLong(end));
+    
+    System.out.println("Enter the event location:");
+    location = input.nextLine();
+    event.get(i).setLocation(location);
   }
   
   private static void getEventGeo(int i, Scanner input, ArrayList<Events> event)
@@ -186,7 +188,7 @@ public class iCalendar {
     }
   }
   
-  private static void getEventClass(int i, Scanner input, ArrayList<Events> event)
+  public static void getEventClass(int i, Scanner input, ArrayList<Events> event)
   {
     char classAnswer;
     int choice;
@@ -226,7 +228,7 @@ public class iCalendar {
       event.get(i).setClassi(classif);
     }
   }
-  
+ 
   public static void calcDist(ArrayList<Events> event) 
   {
 	  String geoComment = null;

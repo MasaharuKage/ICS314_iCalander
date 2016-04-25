@@ -40,7 +40,7 @@ public class Events
       setDTEnd("");
       setLocation("");
       setGeo("");
-      setTZ("");
+      setTZ("Pacific/Honolulu");
       setClassi("");
       setComments("");
       day = 0;

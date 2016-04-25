@@ -1,7 +1,7 @@
 /* 
  * Calendar Object
  * 
- * Team Quartro
+ * Team Quatro
  */
 
 import java.io.*;
@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
 import java.net.InetAddress;
+import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.Collections;
 
@@ -69,13 +70,25 @@ public class iCalendar {
 
     for (int i = 0; temp1 == true; i++) 
     {
+      String summary, descrip, location;
       /* Create Event object */
       Events event1 = new Events();
       event.add(event1);
       Scanner input = null;
       input = new Scanner(System.in);
       
-      getBasicEventInfo(i, input, event);
+      System.out.println("Enter the name of the event:");
+      summary = input.nextLine();
+      event.get(i).setInfo(summary);
+
+      System.out.println("Enter the description of the event:");
+      descrip = input.nextLine();
+      event.get(i).setDescrip(descrip);
+
+      System.out.println("Enter the event location:");
+      location = input.nextLine();
+      event.get(i).setLocation(location);
+  
       getEventDateTime(i, input, event);
       getEventGeo(i, input, event);
       getEventClass(i, input, event);
@@ -106,24 +119,7 @@ public class iCalendar {
       
       input.close();
     }
-
-  }
-  
-  private static void getBasicEventInfo(int i, Scanner input, ArrayList<Events> event)
-  {
-    String summary, descrip, location;
-   
-    System.out.println("Enter the name of the event:");
-    summary = input.nextLine();
-    event.get(i).setInfo(summary);
-
-    System.out.println("Enter the description of the event:");
-    descrip = input.nextLine();
-    event.get(i).setDescrip(descrip);
-
-    System.out.println("Enter the event location:");
-    location = input.nextLine();
-    event.get(i).setLocation(location);
+    
   }
   
   private static void getEventDateTime(int i, Scanner input, ArrayList<Events> event)
@@ -234,6 +230,9 @@ public class iCalendar {
   public static void calcDist(ArrayList<Events> event) 
   {
 	  String geoComment = null;
+	  /*limit decimal places to 3*/
+	  DecimalFormat df = new DecimalFormat("#.000");
+	  
 	  int i = 0;
 	  int max_size = event.size();
 	  for(i = 0; i < max_size; i++)
@@ -242,10 +241,10 @@ public class iCalendar {
               && (event.get(i-1).getLongitude() != -500) && (event.get(i-1).getLatitude() != -500))
           {
                geoComment = "Distance to next event in " + event.get(i).getLocation() + " is " + 
-                             GCDist.Statute_Miles(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(), 
-                             event.get(i).getLongitude(), event.get(i).getLatitude()) + " miles" 
-                             + " and " + GCDist.Kilometers(event.get(i-1).getLongitude(), 
-                             event.get(i-1).getLatitude(),event.get(i).getLongitude(), event.get(i).getLatitude()) + " kilometers.";
+                             df.format(GCDist.Statute_Miles(event.get(i-1).getLongitude(), event.get(i-1).getLatitude(), 
+                             event.get(i).getLongitude(), event.get(i).getLatitude())) + " miles" 
+                             + " and " + df.format(GCDist.Kilometers(event.get(i-1).getLongitude(), 
+                             event.get(i-1).getLatitude(),event.get(i).getLongitude(), event.get(i).getLatitude())) + " kilometers.";
            
                event.get(i-1).setComments(geoComment);
           }
@@ -281,18 +280,10 @@ public class iCalendar {
         output.write("UID:" + uidValue + '\n');
 
         /* Start time */
-        // output.write("DTSTART: " + event.getTZ() + ":" + event.getDTStart());
-        // output.write("\n");
-
-        /* Start time */
-        output.write("DTSTART:" + event.get(i).getDTStart() + '\n');
+        output.write("DTSTART;TZID=" + event.get(i).getTZ() + ":" + event.get(i).getDTStart() + '\n');
 
         /* End time */
-        // output.write("DTEND: " + event.getTZ() + ":" + event.getDTEnd());
-        // output.write("\n");
-
-        /* End time */
-        output.write("DTEND:" + event.get(i).getDTEnd() + '\n');
+        output.write("DTEND;TZID=" + event.get(i).getTZ() + ":" + event.get(i).getDTEnd() + '\n');
 
         /* Summary */
         output.write("SUMMARY:" + event.get(i).getInfo() + '\n');
